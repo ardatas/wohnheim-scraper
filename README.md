@@ -29,7 +29,7 @@ Optional AI generation:
 
 ```bash
 cp .env.example .env
-# Fill OPENAI_API_KEY in .env if you want AI-generated variants.
+# Fill DEEPSEEK_API_KEY in .env if you want AI-generated variants.
 ```
 
 Optional SMTP sending from the dashboard:
@@ -68,7 +68,23 @@ AI-generated drafts:
 wohnheim generate-drafts --ai
 ```
 
-This uses `OPENAI_API_KEY` if configured. The prompt instructs the model to use only facts from `config/applicant.yaml`; missing facts become placeholders.
+This loads `.env` automatically and prefers DeepSeek:
+
+```env
+DEEPSEEK_API_KEY=sk-...
+DEEPSEEK_MODEL=deepseek-v4-flash
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+```
+
+The current DeepSeek API is OpenAI-compatible. As of 2026-07-03, DeepSeek's official docs list `deepseek-v4-flash` and `deepseek-v4-pro` as current models, while `deepseek-chat` and `deepseek-reasoner` are marked for deprecation on 2026-07-24.
+
+Fallback precedence is:
+
+1. `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL`, `DEEPSEEK_BASE_URL`
+2. `LLM_API_KEY`, `LLM_MODEL`, `LLM_BASE_URL`
+3. `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_BASE_URL`
+
+The prompt instructs the model to use only facts from `config/applicant.yaml`; missing facts become placeholders.
 
 ## Follow-Up Logic
 
@@ -146,4 +162,3 @@ wohnheim messages --status draft
 wohnheim generate-drafts --limit 10
 wohnheim serve --port 8766
 ```
-

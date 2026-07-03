@@ -6,7 +6,7 @@ from typing import Any
 
 from .categories import category_label
 from .config import load_applicant
-from .llm import generate_with_openai
+from .llm import generate_with_llm
 from .mailer import write_eml
 from .store import add_message, last_sent_message, list_residences, next_sequence
 from .utils import ensure_dir, now_iso, slugify
@@ -82,7 +82,7 @@ def build_message(
     if use_ai:
         prompt = _prompt_for_ai(residence, applicant_config, sequence, subject)
         try:
-            generated = generate_with_openai(prompt)
+            generated = generate_with_llm(prompt)
         except Exception as exc:
             generated = None
             body = _fallback_message(
@@ -185,4 +185,3 @@ Kontakt: {email} | {phone}"""
         body += f"\n\n{error_note}"
     body += f"\n\nKategorie intern: {category_label(category)}"
     return body
-

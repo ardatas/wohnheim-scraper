@@ -43,7 +43,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_drafts.add_argument("--applicant", default=DEFAULT_APPLICANT)
     p_drafts.add_argument("--outbox", default="outbox")
     p_drafts.add_argument("--follow-up-days", type=int, default=3)
-    p_drafts.add_argument("--ai", action="store_true", help="Use OPENAI_API_KEY for generated variants")
+    p_drafts.add_argument("--ai", action="store_true", help="Use DeepSeek or another OpenAI-compatible API for generated variants")
     p_drafts.add_argument("--limit", type=int)
 
     p_messages = sub.add_parser("messages", help="List generated messages")
@@ -141,4 +141,3 @@ def main(argv: list[str] | None = None) -> None:
 
 if __name__ == "__main__":
     main()
-
