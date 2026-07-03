@@ -1,0 +1,16 @@
+manual_residences_file: data/seed_residences.csv
+
+source_urls:
+  - name: Studierendenwerk Wohnanlagen
+    url: https://www.studierendenwerk-muenchen-oberbayern.de/wohnheime/wohnanlagen/
+  - name: Studierendenwerk private Traeger
+    url: https://www.studierendenwerk-muenchen-oberbayern.de/wohnheime/weitere-wohnangebote/wohnanlagen-privater-traeger/
+  - name: TUM church social carriers
+    url: https://www.tum.de/studium/im-studium/wohnen-und-arbeiten/wohnen/wohnheime/kirchliche-soziale-traeger
+  - name: Erzbistum Catholic residences
+    url: https://www2.erzbistum-muenchen.de/ordinariat/ressort-4-seelsorge-und-kirchliches-leben/hochschulpastoral/cont/78561
+  - name: ESWM residences
+    url: https://eswm.de/en
+  - name: JIZ accommodation guide
+    url: https://jugendinfo-muenchen.de/documents/389/Accommodation_Munich_10_2025d_PDF.pdf
+

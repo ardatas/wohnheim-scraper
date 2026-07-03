@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+config/applicant.yaml
+data/outreach.sqlite
+outbox/*.eml
+outbox/**/*.eml
+logs/
+.pytest_cache/
+dist/
+build/
+*.egg-info/

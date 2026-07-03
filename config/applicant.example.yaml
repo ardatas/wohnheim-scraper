@@ -1,0 +1,31 @@
+# Copy this file to config/applicant.yaml and fill only truthful, provable facts.
+applicant:
+  full_name: "[Ihr Name]"
+  email: "your.email@example.com"
+  phone: "+49 ..."
+  university: "Technischen Universität München"
+  program: "B.Sc. Informatik"
+  semester: "..."
+  desired_move_in: "so bald wie möglich"
+  max_warm_rent_eur: 550
+  current_housing_truth: "Ich habe aktuell keine langfristig gesicherte Unterkunft in München. [Exact facts/date here]"
+  citizenship_or_status: "[optional, only if relevant]"
+  languages: "Deutsch, Englisch, Türkisch"
+
+# Use short facts that you can prove or explain honestly.
+truthful_reasons:
+  - "Ich bin als Student auf eine bezahlbare Warmmiete angewiesen und kann die üblichen Münchner Marktpreise nicht dauerhaft tragen."
+  - "Ein Wohnplatz würde mein Studium stabilisieren, weil Pendeln/kurzfristige Zwischenmieten aktuell zu viel Zeit und Geld kosten."
+  - "Ich kann sehr kurzfristig reagieren, Unterlagen senden und einen Platz verbindlich annehmen."
+
+attachments:
+  - "Immatrikulationsbescheinigung"
+  - "Ausweis/Reisepass"
+  - "Finanzierungsnachweis oder Kontoauszug, falls erforderlich"
+  - "Lebenslauf, falls erforderlich"
+  - "Motivationsschreiben oder Referenz, falls erforderlich"
+
+tone:
+  language: "de"
+  urgency: "high"
+  style: "polite, direct, specific"
