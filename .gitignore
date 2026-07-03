@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .env
+campaigns/
 config/applicant.yaml
 data/outreach.sqlite
 outbox/*.eml

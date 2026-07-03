@@ -86,6 +86,38 @@ Fallback precedence is:
 
 The prompt instructs the model to use only facts from `config/applicant.yaml`; missing facts become placeholders.
 
+## Weekly Category Campaigns
+
+Use this when you want one base mail for the week, then one tailored mail per residence category. The same category mail is used for every dorm in that category.
+
+```bash
+wohnheim generate-weekly-campaign --ai
+wohnheim serve
+```
+
+This creates:
+
+- one timestamped weekly base mail in `campaigns/<ISO-week>/<timestamp>/base/base-mail.md`
+- one tailored category mail per active category in `campaigns/<ISO-week>/<timestamp>/categories/`
+- dashboard drafts for every active residence
+- `.eml` files under `outbox/<ISO-week>/<timestamp>/<category>/` for residences with email addresses
+
+The weekly base mail uses the last two saved base mails as context, so the AI has continuity from previous weeks. The category mails are generated from the weekly base mail plus the category profile. They intentionally do not mention a specific dorm name, because the same text is reused for every dorm in that category.
+
+To only save the base/category mails without creating dashboard drafts:
+
+```bash
+wohnheim generate-weekly-campaign --ai --no-drafts
+```
+
+To generate only one category:
+
+```bash
+wohnheim generate-weekly-campaign --ai --category catholic_church
+```
+
+Generated `campaigns/`, `outbox/`, and `data/outreach.sqlite` files are ignored by Git because they can contain private applicant details.
+
 ## Follow-Up Logic
 
 Initial drafts are created for active residences with no prior message.
@@ -149,6 +181,7 @@ Initial source surfaces include:
 - `config/applicant.yaml`: your private, truthful profile. This is intentionally ignored until you create it.
 - `data/seed_residences.csv`: current seed findings.
 - `data/outreach.sqlite`: generated database, ignored by Git.
+- `campaigns/`: generated weekly base and category mails, ignored by Git.
 - `outbox/*.eml`: generated message files, ignored by Git.
 
 ## Useful Commands
@@ -160,5 +193,7 @@ wohnheim list --all
 wohnheim messages
 wohnheim messages --status draft
 wohnheim generate-drafts --limit 10
+wohnheim generate-weekly-campaign --ai
+wohnheim generate-weekly-campaign --ai --no-drafts
 wohnheim serve --port 8766
 ```

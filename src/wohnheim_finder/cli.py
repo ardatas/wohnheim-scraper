@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from .categories import CATEGORIES, category_label
+from .campaigns import generate_weekly_campaign
 from .config import load_yaml
 from .discover import discover
 from .drafts import generate_due_drafts
@@ -45,6 +46,22 @@ def build_parser() -> argparse.ArgumentParser:
     p_drafts.add_argument("--follow-up-days", type=int, default=3)
     p_drafts.add_argument("--ai", action="store_true", help="Use DeepSeek or another OpenAI-compatible API for generated variants")
     p_drafts.add_argument("--limit", type=int)
+
+    p_weekly = sub.add_parser(
+        "generate-weekly-campaign",
+        help="Generate one weekly base mail and one tailored mail per residence category",
+    )
+    p_weekly.add_argument("--applicant", default=DEFAULT_APPLICANT)
+    p_weekly.add_argument("--campaigns-dir", default="campaigns")
+    p_weekly.add_argument("--outbox", default="outbox")
+    p_weekly.add_argument("--ai", action="store_true", help="Use DeepSeek or another OpenAI-compatible API")
+    p_weekly.add_argument(
+        "--category",
+        action="append",
+        dest="categories",
+        help="Limit generation to one category; may be passed multiple times",
+    )
+    p_weekly.add_argument("--no-drafts", action="store_true", help="Only save base/category mails; do not create dashboard drafts")
 
     p_messages = sub.add_parser("messages", help="List generated messages")
     p_messages.add_argument("--status", choices=["draft", "approved", "sent", "skipped", "error"])
@@ -111,6 +128,34 @@ def main(argv: list[str] | None = None) -> None:
         print(
             f"Drafted {stats['initial']} initial emails and {stats['follow_up']} follow-ups; skipped {stats['skipped']}."
         )
+        return
+
+    if args.command == "generate-weekly-campaign":
+        if get_setting(conn, "outreach_paused", "false") == "true":
+            print("Outreach is paused. Run `wohnheim resume` to draft again.")
+            return
+        applicant_path = Path(args.applicant)
+        if not applicant_path.exists():
+            print(
+                f"Applicant profile missing: {applicant_path}. Copy config/applicant.example.yaml to config/applicant.yaml and fill truthful facts.",
+                file=sys.stderr,
+            )
+            raise SystemExit(2)
+        result = generate_weekly_campaign(
+            conn,
+            applicant_path,
+            campaigns_dir=args.campaigns_dir,
+            outbox_dir=args.outbox,
+            use_ai=args.ai,
+            create_drafts=not args.no_drafts,
+            limit_categories=args.categories,
+        )
+        print(f"Generated weekly campaign {result.week_id}/{result.timestamp}.")
+        print(f"Base mail: {result.base_path}")
+        print("Category mails:")
+        for category, path in result.category_paths.items():
+            print(f"- {category}: {path}")
+        print(f"Created {result.drafts_created} dashboard drafts; skipped {result.skipped}.")
         return
 
     if args.command == "messages":
